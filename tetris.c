@@ -171,7 +171,6 @@ void init_tiles(tile *tiles)
 	tiles[6].sq[3].y = -1; 
 }
 
-
 void draw_on_screen(scr_pos pos, char c)
 {
 	move(pos.r, pos.c); 
@@ -298,7 +297,6 @@ void init(tile *tiles, board *bd, screen *scr, game_state *state, int nrows, int
 	init_game_state(state, bd, scr, tiles); 
 }
 
-
 int get_key_pressed()
 {
 	int ch = getch(); 
@@ -308,7 +306,6 @@ int get_key_pressed()
 	}
 	return NO_KEY_PRESSED; 
 }
-
 
 point rotate(point p, int rotation)
 {
@@ -362,7 +359,6 @@ pos get_world_pos_for_square(int i, game_state *state)
 	return p; 
 }
 
-
 void render_current_tile(game_state *state)
 {
 	pos p2; 
@@ -376,11 +372,30 @@ void render_current_tile(game_state *state)
 	}
 }
 
+pos get_rotation_allowed_pos(game_state *state)
+{
+	// testez pentru peretele din stanga
+	pos p1 = state->tile_position; 
+
+	int i; 
+	for (i = 0; i < NR_SQUARES_PER_TILE; i++)
+	{
+		// TODO:
+	}
+
+	return p1; 
+
+}
 
 void rotate_current_tile(game_state *state)
 {
 	int r = state->current_tile.rotation; 
-	state->current_tile.rotation = (r + 1) % NR_ROTATIONS; 
+	int new_rotation = (r + 1) % NR_ROTATIONS; 
+
+	// verific daca se poate roti (dupa rotire nu atinge peretii)
+	state->tile_position = get_rotation_allowed_pos(state); 
+
+	state->current_tile.rotation = new_rotation; 
 }
 
 bool has_square(board *bd, pos p)
@@ -428,7 +443,6 @@ void render_board(game_state *state)
 	}
 }
 
-
 pos move_pos(pos p, int side)
 {
 	pos p2; 
@@ -448,7 +462,6 @@ pos move_pos(pos p, int side)
 	}
 	return p2; 
 }
-
 
 bool verify_free(int side, game_state *state)
 {
@@ -503,7 +516,6 @@ bool is_near_border(pos p, int side, game_state *state)
 	return false; 
 }
 
-
 bool verify_border(int side, game_state *state)
 {
 	int i; 
@@ -526,7 +538,6 @@ bool can_move(int side, game_state *state)
 	return verify_border(side, state) && verify_free(side, state); 
 }
 
-
 void move_current_tile(int side, game_state *state)
 {
 	if (!can_move(side, state))
@@ -541,7 +552,6 @@ void set_new_tile(game_state *state)
 	state->current_tile = get_random_tile(); 
 	state->tile_position = initial_tile_position(state->bd); 
 }
-
 
 void fix_tile(game_state *state)
 {
@@ -579,7 +589,6 @@ void get_completed_lines(game_state *state, bool *completed_lines)
 	}
 }
 
-
 void delete_line(int i, board *bd)
 {
 	int j; 
@@ -608,7 +617,6 @@ void move_down_all(int i, board *bd)
 		}
 	}
 }
-
 
 void increment_score(game_state *state)
 {
@@ -725,7 +733,7 @@ int main(int argc, char **argv)
 
 			if (tolower(p) == 's')
 			{
-				// cobor piesa in jos
+				// cobor piesa
 				// TODO: 
 			}
 		}
